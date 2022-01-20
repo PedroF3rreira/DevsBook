@@ -1,0 +1,55 @@
+Esquema do banco de dados
+
+Banco: devsBook
+
+tabelas:
+
+--users
+	-id
+	-name
+	-email
+	-password
+	-birthdate
+	-city
+	-work
+	-avatar
+	-token
+	-cover
+
+--useRelations
+	-id
+	-user_from
+	-user_to
+
+--posts
+	-id
+	-type
+	-created_at
+	-body
+
+--postComments
+	-id
+	-id_post
+	-id_user
+	-created_at
+	-body
+
+--postLikes
+	-id
+	-id_post
+	-id_user
+	-created_at
+
+trajetório do sistema
+
+desenvolvendo verificação de usuário logado ou não logado
+atraves do token e verificando usuário.
+
+foi criado uma pasta para armazenar classes que cuidam de 
+responsabilidades destintas
+
+criado um classe LoginHandler para cuidar da verificação de login
+
+(obs) toda responsabilidade de verificação e login fica com a class
+LoginHandler
+
