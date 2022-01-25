@@ -6,7 +6,7 @@ use \src\handles\LoginHandler;
 
 class LoginController extends Controller {
 
-    //http get
+    //renderiza a page singin
     public function singin() {
 
         $flash = '';

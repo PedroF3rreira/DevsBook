@@ -9,7 +9,12 @@
         <div class="row">
             <div class="column pr-5">
                 <?=$render('feed-editor', ['user' => $loggedUser]) ?>
-                <?=$render('feed-item', ['user' => $loggedUser]) ?>
+                <?php foreach($feed as $feedItem):?>
+                    <?=$render('feed-item', [
+                        'post' => $feedItem
+                    ]) ?>
+                <?php endforeach; ?>
+                
             </div>
             <div class="column side pl-5">
                 <div class="box banners">
