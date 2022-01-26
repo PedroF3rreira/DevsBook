@@ -31,8 +31,13 @@ class PostHandler
 		}
 	}
 
-	public function getHomeFeed($idUser)
+	/**
+	 * @param int idUser
+	 * @return array
+	 * **/
+	public function getHomeFeed($idUser, $page)
     {
+    	$pagePer = 3;
     	//1 pegar lista de usuários que eu sigo
         $userList = UserRelation::select()->where('user_from', $idUser)->get();
 
@@ -48,7 +53,20 @@ class PostHandler
         $postsList = Post::select()
 	        ->where('id_user','in', $users)
 	        ->orderBy('created_at', 'desc')
+	        ->page($page,$pagePer)//recebe pagina atual e quantidade de registros
         ->get();
+
+        /**
+         * Pega o total de registros dos posts 
+         * e divide resultado pela quantidade de poste que queremos exibir 
+         * na tela inicial
+         * */
+         $total = Post::select()
+	        ->where('id_user','in', $users)
+        ->count();
+
+        $pageCount = ceil($total / $pagePer);
+
 
         //3. transformar resultados de post e users em objetos de seus models
         $posts = [];
@@ -62,18 +80,33 @@ class PostHandler
         	$newPost->created_at = $postItem['created_at'];
         	$newPost->body = $postItem['body'];
         	$newPost->id_user = $postItem['id_user'];
+        	$newPost->mine = false;
 
+        	if($postItem['id_user'] == $idUser){
+        		$newPost->mine = true;
+        	}
         	//4 preencher informaçoes adicionais no post como avatar nome etc..
         	$newUser = User::select()->where('id', $postItem['id_user'])->one();
         	
+        	//como se fosse configuração chave estrangeira en dotnet em um model
         	$newPost->user = new User();
         	$newPost->user->id = $newUser['id'];
         	$newPost->user->name = $newUser['name'];
         	$newPost->user->avatar = $newUser['avatar'];
 
+        	$newPost->likesCount = 0;
+        	$newPost->liked = false;
+
+        	$newPost->commentsCount = [];
+
         	$posts[] = $newPost;
         }
+        
         //5 retornar o resultado
-        return $posts;
+        return [
+        	'posts' => $posts,
+        	'pageCount' => $pageCount,//envia quantidade de paginas para home
+        	'currentPage' => $page
+        ];
     }
 }

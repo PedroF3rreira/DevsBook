@@ -20,12 +20,17 @@ class HomeController extends Controller {
 
     public function index() {
 
+        /*pega via get o numero da pagina atual para o 
+        sistema identificar em que pagina esta*/
+
+        $page = intVal(filter_input(INPUT_GET, 'page'));
+
         //pega feed da pagina home
-        $feed = PostHandler::getHomeFeed($this->loggedUser->id);
+        $feed = PostHandler::getHomeFeed($this->loggedUser->id, $page);
 
         $this->render('home', [
             'loggedUser' => $this->loggedUser,
-            'feed' => $feed
+            'feed' => $feed,
         ]);
     }
 }

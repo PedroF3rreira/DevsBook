@@ -111,3 +111,20 @@
     font-size:13px;
     padding:0 15px;
 }
+.feed-pagination{
+    display: flex;
+
+}
+.feed-pagination a{
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    border: 1px solid #999;
+    color: #000;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.feed-pagination .active{
+    background-color: rgba(0,0,255,0.2);
+}

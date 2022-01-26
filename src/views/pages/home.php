@@ -9,12 +9,23 @@
         <div class="row">
             <div class="column pr-5">
                 <?=$render('feed-editor', ['user' => $loggedUser]) ?>
-                <?php foreach($feed as $feedItem):?>
+                <?php foreach($feed['posts'] as $feedItem):?>
                     <?=$render('feed-item', [
-                        'post' => $feedItem
+                        'post' => $feedItem,
+                        'loggedUser' => $loggedUser
                     ]) ?>
                 <?php endforeach; ?>
-                
+
+                <!-- rederiza links da paginação básica -->
+                <div class="feed-pagination">
+                    <?php for($i = 0; $i < $feed['pageCount'];$i++): ?>
+                        
+                        <a class="<?=($i==$feed['currentPage']?'active':'')?>" href="<?=$base;?>/?page=<?=$i;?>">
+                            <?=$i + 1;?>
+                        </a>
+                        
+                    <?php endfor; ?>
+                </div>
             </div>
             <div class="column side pl-5">
                 <div class="box banners">
