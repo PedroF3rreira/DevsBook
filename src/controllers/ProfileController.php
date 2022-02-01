@@ -5,7 +5,7 @@ use \core\Controller;
 use \src\handles\UserHandler;
 use \src\handles\PostHandler;
 
-class HomeController extends Controller {
+class ProfileController extends Controller {
 
     private $loggedUser;
 
@@ -18,19 +18,21 @@ class HomeController extends Controller {
         }
     }
 
-    public function index() {
+    public function index($args = []) {
 
-        /*pega via get o numero da pagina atual para o 
-        sistema identificar em que pagina esta*/
+        $id = $this->loggedUser->id;
 
+        if(!empty($args)){
+            $id = $args['id'];
+        }
+        
         $page = intVal(filter_input(INPUT_GET, 'page'));
-
         //pega feed da pagina home
         $feed = PostHandler::getHomeFeed($this->loggedUser->id, $page);
 
-        $this->render('home', [
+        $this->render('profile', [
             'loggedUser' => $this->loggedUser,
-            'feed' => $feed,
+            'feed' => $feed
         ]);
     }
 }

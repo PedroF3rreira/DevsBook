@@ -46,6 +46,7 @@ header .head-side {
     justify-content: space-between;
     align-items: center;
 }
+
 .head-side .head-side-left {
     display: flex;
 }
@@ -82,11 +83,12 @@ header .head-side {
     cursor: pointer;
     text-decoration: none;
 }
-.user-area-text {
+.user-area-text a {
     color:#FFF;
     font-size:12px;
     font-weight: bold;
     margin-right:10px;
+    text-decoration: none;
 }
 .user-area-icon {
     margin-right:5px;

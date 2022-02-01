@@ -2,21 +2,25 @@
 
 <section class="container main">
 
-    <?php $render('aside'); ?>
+    <?php $render('aside', ['menuActive' => 'home']); ?>
 
     <section class="feed mt-10">
 
         <div class="row">
             <div class="column pr-5">
+                
                 <?=$render('feed-editor', ['user' => $loggedUser]) ?>
+                
                 <?php foreach($feed['posts'] as $feedItem):?>
+                    
                     <?=$render('feed-item', [
                         'post' => $feedItem,
                         'loggedUser' => $loggedUser
                     ]) ?>
+                
                 <?php endforeach; ?>
 
-                <!-- rederiza links da paginação básica -->
+                <!-- renderizar links da paginação básica -->
                 <div class="feed-pagination">
                     <?php for($i = 0; $i < $feed['pageCount'];$i++): ?>
                         

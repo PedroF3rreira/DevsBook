@@ -12,48 +12,60 @@ class PostHandler
 	/**
 	 * Método adiciona post na tabela posts
 	 * @access public
-	 * @param string type
-	 * @param string body
-	 * @param int idUser
+	 * @param string $type
+	 * @param string $body
+	 * @param int $idUser
 	**/
 	public static function addPost($type, $body, $idUser)
 	{
-		$body = trim($body);
+		try {
 
-		if(!empty($idUser) && !empty($body)){
+			$body = trim($body);
 
-			Post::insert([
-				'type' => $type,
-				'created_at' => date('Y-m-d H:i:s'),
-				'body' => $body,
-				'id_user' => $idUser
-			])->execute();
+			if(!empty($idUser) && !empty($body)){
+
+				Post::insert([
+					'type' => $type,
+					'created_at' => date('Y-m-d H:i:s'),
+					'body' => $body,
+					'id_user' => $idUser
+				])->execute();
+			}
+
+			return true;
+			
+		} catch (PDOException $e) {
+			return false;
 		}
 	}
 
 	/**
-	 * @param int idUser
+	 * processa dados do feed e cuida da paginação
+	 * @param int $idUser
+	 * @param string $page
 	 * @return array
 	 * **/
+
 	public function getHomeFeed($idUser, $page)
     {
-    	$pagePer = 3;
+    	$pagePer = 3;//define quantidade de post que podem aparecer na página
+
     	//1 pegar lista de usuários que eu sigo
         $userList = UserRelation::select()->where('user_from', $idUser)->get();
 
         $users = [];
 
         foreach($userList as $userItem){
-            $users[] = $userItem['user_to'];
+            $users[] = $userItem['user_to'];//recebe cada usuário que segue quem esta logado 
         }
 
-        $users[] = $idUser;//adicionando meu usuario
+        $users[] = $idUser;//adicionando meu usuário
 
-        //2 pegar posts da lista de usuarios que sigo ordenado pela data
+        //2 pegar posts da lista de usuários que sigo ordenado pela data
         $postsList = Post::select()
 	        ->where('id_user','in', $users)
 	        ->orderBy('created_at', 'desc')
-	        ->page($page,$pagePer)//recebe pagina atual e quantidade de registros
+	        ->page($page,$pagePer)//recebe página atual e quantidade de registros
         ->get();
 
         /**
@@ -65,10 +77,10 @@ class PostHandler
 	        ->where('id_user','in', $users)
         ->count();
 
-        $pageCount = ceil($total / $pagePer);
-
+        $pageCount = ceil($total / $pagePer);//usa função ceil para arredondar para cima
 
         //3. transformar resultados de post e users em objetos de seus models
+        //ubido informações dos posts e seus usuários
         $posts = [];
 
         foreach($postsList as $postItem){
@@ -106,7 +118,7 @@ class PostHandler
         return [
         	'posts' => $posts,
         	'pageCount' => $pageCount,//envia quantidade de paginas para home
-        	'currentPage' => $page
+        	'currentPage' => $page//envia a pagina atual que uauario esta
         ];
     }
 }

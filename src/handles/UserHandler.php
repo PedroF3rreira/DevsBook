@@ -6,7 +6,7 @@ use \src\models\User;
 /**
  * classe responsavel pelo gerenciamento de login 
  */
-class LoginHandler
+class UserHandler
 {
 	/*
 	*método faz verificação de token e sessão de usuario
